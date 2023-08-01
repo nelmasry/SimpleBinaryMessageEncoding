@@ -4,7 +4,11 @@ Simple Binary Message Encoding is a library for encoding and decoding binary mes
 
 ## Table of Contents
 1. [About the Project](#about-the-project)
-1. [Getting Started](#getting-started)
+2. [Assumptions](#assumptions)
+3. [Getting Started](#getting-started)
+4. [Usage](#usage)
+5. [Testing](#testing)
+6. [Contributing](#contributing)
 
 ## About the project
 
