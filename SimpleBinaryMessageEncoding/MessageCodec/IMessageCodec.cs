@@ -48,33 +48,26 @@ namespace SimpleBinaryMessageEncoding.MessageCodec
             if (!IsValidMessage(message))
                 throw new MessageCodecInvalidDataException(Utility.ErrorMessage);
 
-            try
-            {
-                List<byte> encodedMessage = new List<byte>
+            List<byte> encodedMessage = new List<byte>
                 {
                     (byte)message.Headers.Count
                 };
 
-                foreach (KeyValuePair<string, string> header in message.Headers)
-                {
-                    byte[] nameBytes = Utility.GetAsciiBytes(header.Key);
-                    byte[] valueBytes = Utility.GetAsciiBytes(header.Value);
-
-                    encodedMessage.Add((byte)nameBytes.Length);
-                    encodedMessage.Add((byte)valueBytes.Length);
-
-                    encodedMessage.AddRange(nameBytes);
-                    encodedMessage.AddRange(valueBytes);
-                }
-
-                encodedMessage.AddRange(message.Payload);
-
-                return encodedMessage.ToArray();
-            }
-            catch (Exception ex)
+            foreach (KeyValuePair<string, string> header in message.Headers)
             {
-                throw new Exception(ex.Message);
+                byte[] nameBytes = Utility.GetAsciiBytes(header.Key);
+                byte[] valueBytes = Utility.GetAsciiBytes(header.Value);
+
+                encodedMessage.Add((byte)nameBytes.Length);
+                encodedMessage.Add((byte)valueBytes.Length);
+
+                encodedMessage.AddRange(nameBytes);
+                encodedMessage.AddRange(valueBytes);
             }
+
+            encodedMessage.AddRange(message.Payload);
+
+            return encodedMessage.ToArray();
         }
 
         public Message Decode(byte[] data)
@@ -82,49 +75,38 @@ namespace SimpleBinaryMessageEncoding.MessageCodec
             if (!IsValidBinaryData(data))
                 throw new MessageCodecInvalidDataException(Utility.ErrorMessage);
 
-            try
+            List<byte> messageData = new List<byte>(data);
+            Message message = new Message()
             {
-                List<byte> messageData = new List<byte>(data);
-                Message message = new Message()
-                {
-                    Headers = new Dictionary<string, string>()
-                };
+                Headers = new Dictionary<string, string>()
+            };
 
-                int headersCount = messageData[0];
-                messageData.RemoveSafe(0);
+            int headersCount = messageData[0];
+            messageData.RemoveSafe(0);
 
-                for (int i = 0; i < headersCount; i++)
-                {
-                    int nameLength = messageData[0];
-                    int valueLength = messageData[1];
-                    messageData.RemoveSafe(0, 2);
-
-                    string name = Utility.GetStringFromAsciiBytes(messageData, nameLength);
-                    messageData.RemoveSafe(0, nameLength);
-
-                    string value = Utility.GetStringFromAsciiBytes(messageData, valueLength);
-                    messageData.RemoveSafe(0, valueLength);
-
-                    message.Headers.Add(name, value);
-                }
-                
-                message.Payload = messageData.ToArray();
-
-                return message;
-            }
-            catch (MessageCodecInvalidDataException ex)
+            for (int i = 0; i < headersCount; i++)
             {
-                throw;
+                int nameLength = messageData[0];
+                int valueLength = messageData[1];
+                messageData.RemoveSafe(0, 2);
+
+                string name = Utility.GetStringFromAsciiBytes(messageData, nameLength);
+                messageData.RemoveSafe(0, nameLength);
+
+                string value = Utility.GetStringFromAsciiBytes(messageData, valueLength);
+                messageData.RemoveSafe(0, valueLength);
+
+                message.Headers.Add(name, value);
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            message.Payload = messageData.ToArray();
+
+            return message;
         }
 
-        private bool IsValidBinaryData(byte[] data)
+        private bool IsValidBinaryData(byte[] binaryData)
         {
-            return Utility.IsValidMessage(data);
+            return Utility.IsValidMessage(binaryData);
         }
 
         private bool IsValidMessage(Message message)
