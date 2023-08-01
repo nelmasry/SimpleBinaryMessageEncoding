@@ -21,6 +21,15 @@ Simple Binary Message Encoding is a library for encoding and decoding binary mes
   - SimpleBinaryMessageEncoding: Class library having the code for Message encoding & decoding
   - SimpleBinaryMessageEncoding.Tests: Test project for unit tests
 
+## Assumptions
+-  Project is a class library that will be used by developers to encode and decode messages
+-  For simplicity, IMessageCodec interface has the Encode and Decode functionality implemented in SimpleMessageCodec class
+-  Utilities project is added for helper methods and extension used by SimpleMessageCodec class
+    - Utility class has all validations and helper methods
+    - Extensions for any extension methods
+    - MessageCodecInvalidDataException as a custom exceptoin used by SimpleMessageCodec
+-  Assumed that message payload can contain binary data without any specific character encoding (**Only ASCII characters**).
+
 ## Getting Started
 
 To use the library in your project, follow these steps:
