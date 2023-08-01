@@ -84,6 +84,10 @@ namespace SimpleBinaryMessageEncoding.Tests
 
 
         // helper methods
+        /// <summary>
+        /// Get invalid test messages for encoding tests
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> GetInvalidMessages()
         {
             return new List<object[]>
@@ -144,7 +148,11 @@ namespace SimpleBinaryMessageEncoding.Tests
             },
         };
         }
-
+        
+        /// <summary>
+        /// Return Headers exceeding max limit count of headers
+        /// </summary>
+        /// <returns></returns>
         private static Dictionary<string, string> GetMaxHeaders()
         {
             var headers = new Dictionary<string, string>();
@@ -155,6 +163,10 @@ namespace SimpleBinaryMessageEncoding.Tests
             return headers;
         }
 
+        /// <summary>
+        /// Get invalid test binary data for decoding tests
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<object[]> GetInvalidBinaryData()
         {
             return new List<object[]>

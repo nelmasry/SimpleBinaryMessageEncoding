@@ -43,6 +43,12 @@ namespace SimpleBinaryMessageEncoding.MessageCodec
 
     public class SimpleMessageCodec : IMessageCodec
     {
+        /// <summary>
+        /// Encode message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        /// <exception cref="MessageCodecInvalidDataException"></exception>
         public byte[] Encode(Message message)
         {
             if (!IsValidMessage(message))
@@ -70,6 +76,12 @@ namespace SimpleBinaryMessageEncoding.MessageCodec
             return encodedMessage.ToArray();
         }
 
+        /// <summary>
+        /// Decode binary data
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="MessageCodecInvalidDataException"></exception>
         public Message Decode(byte[] data)
         {
             if (!IsValidBinaryData(data))
@@ -104,11 +116,21 @@ namespace SimpleBinaryMessageEncoding.MessageCodec
             return message;
         }
 
+        /// <summary>
+        /// Validate binary data
+        /// </summary>
+        /// <param name="binaryData"></param>
+        /// <returns></returns>
         private bool IsValidBinaryData(byte[] binaryData)
         {
             return Utility.IsValidMessage(binaryData);
         }
 
+        /// <summary>
+        /// Validate message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private bool IsValidMessage(Message message)
         {
             return Utility.IsValidMessage(message) &&
